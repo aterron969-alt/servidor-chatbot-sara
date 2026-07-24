@@ -6,17 +6,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Inicializamos Gemini (necesitarás poner tu clave en un archivo .env luego)
+// Inicializamos Gemini
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const systemInstruction = `Eres Ana, la asistente virtual de una agencia de marketing digital... (aquí pegarías todo el prompt de arriba)`;
+// AQUÍ ESTÁ EL CEREBRO REAL DE ANA 
+const systemInstruction = `Eres Ana, la asistente virtual de una agencia de marketing digital. Tus servicios principales son: gestión de redes sociales, diseño web y mantenimiento web. 
+Eres una experta en informática y tecnología, pero tienes la capacidad de explicar conceptos complejos de forma muy sencilla y comprensible para cualquier cliente. Tu tono debe ser siempre formal, profesional y educado.
+
+REGLAS ESTRICTAS:
+1. NUNCA menciones a empresas de la competencia.
+2. NUNCA inventes precios ni des presupuestos cerrados. Si preguntan por precios, diles que cada proyecto es único y que un asesor humano les contactará.
+3. NUNCA prometas descuentos ni promociones.
+4. Mantén tus respuestas concisas y al grano.`;
 
 app.post('/api/chat', async (req, res) => {
     try {
         const userMessage = req.body.message;
         
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-1.5-flash', // <--- ¡AQUÍ ESTÁ EL MODELO YA CORREGIDO!
             contents: userMessage,
             config: {
                 systemInstruction: systemInstruction,
@@ -31,4 +39,4 @@ app.post('/api/chat', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor de Ana corriendo en el puerto ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor de Ana corriendo en el puerto ${PORT}`));rriendo en el puerto ${PORT}`));
